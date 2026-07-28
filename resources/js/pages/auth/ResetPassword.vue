@@ -2,8 +2,8 @@
 import { Form, Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import NewPasswordController from '@/actions/Laravel/Fortify/Http/Controllers/NewPasswordController';
-import GuestLayout from '@/layouts/GuestLayout.vue';
 import UPasswordStrengthIndicator from '@/components/input/UPasswordStrengthIndicator.vue';
+import GuestLayout from '@/layouts/GuestLayout.vue';
 
 const props = defineProps<{
     token: string;
@@ -32,19 +32,25 @@ const inputEmail = ref(props.email);
                 class="flex flex-col gap-6"
             >
                 <UFormField name="email" :error="errors.email" label="Email">
-                    <UInput type="email" class="w-full" autocomplete="email" icon="i-lucide-mail" readonly="true" v-model="inputEmail" />
-                </UFormField>
-
-                <UFormField name="password" :error="errors.password" label="Password">
-                    <UPasswordStrengthIndicator
-                        name="password"
-                        placeholder="Nuova password"
-                        autofocus
-                        required
+                    <UInput
+                        type="email"
+                        class="w-full"
+                        autocomplete="email"
+                        icon="i-lucide-mail"
+                        readonly="true"
+                        v-model="inputEmail"
                     />
                 </UFormField>
 
-                <UFormField name="password_confirmation" :error="errors.password_confirmation" label="Conferma password">
+                <UFormField name="password" :error="errors.password" label="Password">
+                    <UPasswordStrengthIndicator name="password" placeholder="Nuova password" autofocus required />
+                </UFormField>
+
+                <UFormField
+                    name="password_confirmation"
+                    :error="errors.password_confirmation"
+                    label="Conferma password"
+                >
                     <UPasswordStrengthIndicator
                         name="password_confirmation"
                         placeholder="Conferma la password"
@@ -53,9 +59,7 @@ const inputEmail = ref(props.email);
                     />
                 </UFormField>
 
-                <UButton :loading="processing" type="submit" block>
-                    Reimposta password
-                </UButton>
+                <UButton :loading="processing" type="submit" block> Reimposta password </UButton>
             </Form>
         </UPageCard>
     </GuestLayout>

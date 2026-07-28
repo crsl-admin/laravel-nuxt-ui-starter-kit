@@ -98,17 +98,9 @@ const text = computed(() => {
         </UInput>
 
         <template v-if="showStrength">
-            <UProgress
-                :color="color"
-                :indicator="text"
-                :model-value="score"
-                :max="4"
-                size="sm"
-            />
+            <UProgress :color="color" :indicator="text" :model-value="score" :max="4" size="sm" />
 
-            <p :id="strengthId" class="text-sm font-medium">
-                {{ text }}. Deve contenere:
-            </p>
+            <p :id="strengthId" class="text-sm font-medium">{{ text }}. Deve contenere:</p>
 
             <ul class="space-y-1" aria-label="Requisiti password">
                 <li
@@ -117,10 +109,7 @@ const text = computed(() => {
                     class="flex items-center gap-0.5"
                     :class="req.met ? 'text-success' : 'text-muted'"
                 >
-                    <UIcon
-                        :name="req.met ? 'i-lucide-circle-check' : 'i-lucide-circle-x'"
-                        class="size-4 shrink-0"
-                    />
+                    <UIcon :name="req.met ? 'i-lucide-circle-check' : 'i-lucide-circle-x'" class="size-4 shrink-0" />
                     <span class="text-xs font-light">
                         {{ req.text }}
                         <span class="sr-only">

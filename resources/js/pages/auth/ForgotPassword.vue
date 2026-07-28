@@ -33,17 +33,12 @@ import GuestLayout from '@/layouts/GuestLayout.vue';
                     />
                 </UFormField>
 
-                <UButton :loading="processing" type="submit" block>
-                    Invia link per reimpostare la password
-                </UButton>
+                <UButton :loading="processing" type="submit" block> Invia link per reimpostare la password </UButton>
             </Form>
 
             <div class="mt-6 text-center text-sm text-muted">
                 <span>Oppure, vai alla pagina di</span>
-                <ULink
-                    :to="authenticatedSessionController.create().url"
-                    class="font-medium text-primary"
-                >
+                <ULink :to="authenticatedSessionController.create().url" class="font-medium text-primary">
                     Login
                 </ULink>
             </div>
