@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
-import type { FormSubmitEvent } from '@nuxt/ui';
-import NewPasswordController from '@/actions/Laravel/Fortify/Http/Controllers/NewPasswordController';
+import RegisteredUserController from '@/actions/Laravel/Fortify/Http/Controllers/RegisteredUserController';
 import UPasswordStrengthIndicator from '@/components/input/UPasswordStrengthIndicator.vue';
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import RegisteredUserController from '@/actions/Laravel/Fortify/Http/Controllers/RegisteredUserController';
 
-const onSubmit = (payload: FormSubmitEvent<any>) => {
-    console.log('Submitted', payload);
-};
 </script>
 
 <template>
