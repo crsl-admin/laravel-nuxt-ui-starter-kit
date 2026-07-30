@@ -39,14 +39,14 @@ const fields: AuthFormField[] = [
 const providers = [
     {
         label: 'Google',
-        icon: 'i-simple-icons-google',
+        icon: 'material-icon-theme:google',
         onClick: () => {
             toast.add({ title: 'Google', description: 'Login with Google' });
         },
     },
     {
         label: 'Microsfot',
-        icon: 'i-simple-icons-microsoft',
+        icon: 'logos:microsoft-icon',
         onClick: () => {
             toast.add({ title: 'GitHub', description: 'Login with GitHub' });
         },

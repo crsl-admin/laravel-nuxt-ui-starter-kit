@@ -6,6 +6,11 @@ import { computed, ref } from 'vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';
 
+defineProps<{
+    breadcrumbItems?: NavigationMenuItem[];
+    title: string;
+}>();
+
 const { url } = usePage();
 // const toast = useToast();
 
@@ -115,7 +120,6 @@ const groups = computed(() => [
 ]);
 
 const value = ref('');
-
 </script>
 
 <template>
@@ -154,7 +158,19 @@ const value = ref('');
 
             <UDashboardSearch v-model="value" placeholder="Cerca qualcosa" :colorMode="false" :groups="groups" />
 
-            <slot />
+            <UDashboardPanel :id="title">
+                <template #header>
+                    <UDashboardNavbar :title>
+                        <template #leading>
+                            <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" :disabled="false" />
+                        </template>
+                    </UDashboardNavbar>
+                </template>
+
+                <template #body>
+                    <slot />
+                </template>
+            </UDashboardPanel>
 
             <!--            <NotificationsSlideover />-->
         </UDashboardGroup>

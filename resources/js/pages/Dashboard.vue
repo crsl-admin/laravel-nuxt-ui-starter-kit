@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { Head } from '@inertiajs/vue3'
-  import Layout from '@/layouts/AuthLayout.vue'
-
+import { Head } from '@inertiajs/vue3';
+import Layout from '@/layouts/AuthLayout.vue';
 </script>
 
 <template>
-  <Layout>
-    <Head title="Dashboard" />
-      DASHBOARD HERE
-  </Layout>
+    <Layout title="Dashboard">
+        <Head title="Dashboard" />
+        Dashboard
+    </Layout>
 </template>
