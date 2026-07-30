@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::redirect('/', '/login');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', fn () => dd("Dashboard"));
+    Route::get('/dashboard', fn () => Inertia::render("Dashboard"));
 });
 

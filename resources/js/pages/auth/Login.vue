@@ -79,6 +79,8 @@ function onSubmit(payload: FormSubmitEvent<any>) {
                     :providers="providers"
                     separator="oppure"
                     @submit="onSubmit"
+                    :submit="{ label: 'Accedi' }"
+                    :loading="form.processing"
                 >
                     <template #description v-if="canRegister">
                         Non hai ancora un account?
