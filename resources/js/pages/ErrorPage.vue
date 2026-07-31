@@ -29,7 +29,7 @@ const description = computed(() => {
                 size: 'xl',
                 icon: 'i-lucide-arrow-left',
                 label: 'Indietro',
-                to: '/'
+                to: '/',
             }"
             :error="{
                 statusCode: status,

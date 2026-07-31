@@ -7,6 +7,8 @@ import passwordResetLinkController from '@/actions/Laravel/Fortify/Http/Controll
 import RegisteredUserController from '@/actions/Laravel/Fortify/Http/Controllers/RegisteredUserController';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 
+defineOptions({ layout: GuestLayout });
+
 defineProps<{
     canResetPassword: boolean;
     canRegister: boolean;
@@ -69,43 +71,41 @@ function onSubmit(payload: FormSubmitEvent<any>) {
 </script>
 
 <template>
-    <GuestLayout>
-        <div class="flex w-full flex-col items-center justify-center gap-4 p-4">
-            <UPageCard class="w-full max-w-md">
-                <UAuthForm
-                    title="Login"
-                    icon="i-lucide-user"
-                    :fields="fields"
-                    :providers="providers"
-                    separator="oppure"
-                    @submit="onSubmit"
-                    :submit="{ label: 'Accedi' }"
-                    :loading="form.processing"
-                >
-                    <template #description v-if="canRegister">
-                        Non hai ancora un account?
-                        <ULink :to="RegisteredUserController.create().url" class="font-medium text-primary"
-                            >Registrati!</ULink
-                        >
-                    </template>
-                    <template #description v-else> Inserisci le tue credenziali per accedere al tuo account </template>
+    <div class="flex w-full flex-col items-center justify-center gap-4 p-4">
+        <UPageCard class="w-full max-w-md">
+            <UAuthForm
+                title="Login"
+                icon="i-lucide-user"
+                :fields="fields"
+                :providers="providers"
+                separator="oppure"
+                @submit="onSubmit"
+                :submit="{ label: 'Accedi' }"
+                :loading="form.processing"
+            >
+                <template #description v-if="canRegister">
+                    Non hai ancora un account?
+                    <ULink :to="RegisteredUserController.create().url" class="font-medium text-primary"
+                        >Registrati!</ULink
+                    >
+                </template>
+                <template #description v-else> Inserisci le tue credenziali per accedere al tuo account </template>
 
-                    <template #validation v-if="form.hasErrors">
-                        <UAlert color="error" icon="i-lucide-info" :title="form.errors.email || form.errors.password" />
-                    </template>
+                <template #validation v-if="form.hasErrors">
+                    <UAlert color="error" icon="i-lucide-info" :title="form.errors.email || form.errors.password" />
+                </template>
 
-                    <template #password-hint>
-                        <ULink
-                            v-if="canResetPassword"
-                            :to="passwordResetLinkController.create().url"
-                            target="_self"
-                            class="font-medium text-primary"
-                            tabindex="-1"
-                            >Password dimenticata?</ULink
-                        >
-                    </template>
-                </UAuthForm>
-            </UPageCard>
-        </div>
-    </GuestLayout>
+                <template #password-hint>
+                    <ULink
+                        v-if="canResetPassword"
+                        :to="passwordResetLinkController.create().url"
+                        target="_self"
+                        class="font-medium text-primary"
+                        tabindex="-1"
+                        >Password dimenticata?</ULink
+                    >
+                </template>
+            </UAuthForm>
+        </UPageCard>
+    </div>
 </template>

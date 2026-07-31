@@ -17,6 +17,6 @@ return [
     'sent' => 'Ti abbiamo inviato via email il link per la reimpostazione della password.',
     'throttled' => 'Per favore attendi prima di riprovare.',
     'token' => 'Questo token per la reimpostazione della password non è valido.',
-    'user' => "Non riusciamo a trovare un utente con questo indirizzo email.",
+    'user' => 'Non riusciamo a trovare un utente con questo indirizzo email.',
 
 ];

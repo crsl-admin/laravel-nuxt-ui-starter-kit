@@ -30,6 +30,6 @@ export function initializeFlashToast(): void {
             title: data.message,
             description: data.body,
             icon: data.icon ?? iconForColor[color],
-        })
+        });
     });
 }

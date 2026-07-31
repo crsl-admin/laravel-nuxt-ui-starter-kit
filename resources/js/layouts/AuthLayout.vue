@@ -193,7 +193,7 @@ const toaster = {
                                     </UButton>
                                 </UTooltip>
 
-                                <template #content> TODO  </template>
+                                <template #content> TODO </template>
                             </USlideover>
                         </template>
                     </UDashboardNavbar>
