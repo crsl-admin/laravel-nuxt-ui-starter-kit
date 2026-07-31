@@ -128,11 +128,11 @@ const toaster = {
     expand: false,
 };
 
-/*defineShortcuts({
+defineShortcuts({
     n: () => {
         isNotificationsSlideoverOpen.value = !isNotificationsSlideoverOpen.value;
     },
-});*/
+});
 </script>
 
 <template>
@@ -178,7 +178,7 @@ const toaster = {
                             <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" :disabled="false" />
                         </template>
                         <template #right>
-                            <USlideover>
+                            <USlideover title="Notifiche" v-model:open="isNotificationsSlideoverOpen">
                                 <UTooltip text="Notifiche" :shortcuts="['N']">
                                     <UButton
                                         color="neutral"
@@ -193,7 +193,7 @@ const toaster = {
                                     </UButton>
                                 </UTooltip>
 
-                                <template #content> TODO </template>
+                                <template #body> TODO </template>
                             </USlideover>
                         </template>
                     </UDashboardNavbar>
