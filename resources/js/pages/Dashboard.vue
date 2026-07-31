@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
-import Layout from '@/layouts/AuthLayout.vue';
+import { Head, router } from '@inertiajs/vue3';
+
+defineOptions({
+    layout: () => ({ title: 'Dashboard' }),
+});
+
+const sendNotification = () => {
+    router.get('/notify');
+};
 </script>
 
 <template>
-    <Layout title="Dashboard">
-        <Head title="Dashboard" />
-        Dashboard
-    </Layout>
+    <Head title="Dashboard" />
+    <UButton label="Click me" class="m-2" @click="sendNotification" />
 </template>

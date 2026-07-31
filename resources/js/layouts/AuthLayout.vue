@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
-// import { useToast } from '@nuxt/ui/runtime/composables/useToast.js';
 import { computed, ref } from 'vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';
@@ -12,7 +11,6 @@ defineProps<{
 }>();
 
 const { url } = usePage();
-// const toast = useToast();
 
 const open = ref(false);
 
@@ -120,10 +118,25 @@ const groups = computed(() => [
 ]);
 
 const value = ref('');
+
+const isNotificationsSlideoverOpen = ref(false);
+
+const hasNotifications = ref(false);
+
+const toaster = {
+    max: 5,
+    expand: false,
+};
+
+/*defineShortcuts({
+    n: () => {
+        isNotificationsSlideoverOpen.value = !isNotificationsSlideoverOpen.value;
+    },
+});*/
 </script>
 
 <template>
-    <UApp>
+    <UApp :toaster>
         <UDashboardGroup unit="rem" storage="local">
             <UDashboardSidebar
                 id="default"
@@ -163,6 +176,25 @@ const value = ref('');
                     <UDashboardNavbar :title>
                         <template #leading>
                             <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" :disabled="false" />
+                        </template>
+                        <template #right>
+                            <USlideover>
+                                <UTooltip text="Notifiche" :shortcuts="['N']">
+                                    <UButton
+                                        color="neutral"
+                                        variant="ghost"
+                                        square
+                                        @click="isNotificationsSlideoverOpen = true"
+                                    >
+                                        <UChip color="error" inset v-if="hasNotifications">
+                                            <UIcon name="i-lucide-bell" class="size-5 shrink-0" />
+                                        </UChip>
+                                        <UIcon v-else name="i-lucide-bell" class="size-5 shrink-0" />
+                                    </UButton>
+                                </UTooltip>
+
+                                <template #content> TODO  </template>
+                            </USlideover>
                         </template>
                     </UDashboardNavbar>
                 </template>
