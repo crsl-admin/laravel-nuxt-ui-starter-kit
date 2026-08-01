@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { defineShortcuts } from '@nuxt/ui/runtime/composables/defineShortcuts.js';
 import { computed, ref } from 'vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';
