@@ -12,13 +12,13 @@ defineProps<{
 }>();
 
 const colorMode = useColorMode();
-const auth = usePage<App.Data.UserData>().props.auth.user;
+const auth = usePage<{ auth: { user: App.Data.UserData } }>().props.auth.user;
 const { getInitials } = useInitials();
 
 const user = computed(() => ({
     name: auth.email,
     avatar: {
-        text: getInitials(auth.first_name),
+        text: getInitials(auth.full_name),
     },
 }));
 
