@@ -4,6 +4,7 @@ import type { DropdownMenuItem } from '@nuxt/ui';
 import { useColorMode } from '@vueuse/core';
 import { computed } from 'vue';
 // import { destroy } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
+import { useInitials } from '@/composables/useInitials';
 import { logout } from '@/routes';
 
 defineProps<{
@@ -11,13 +12,13 @@ defineProps<{
 }>();
 
 const colorMode = useColorMode();
-const auth = usePage().props.auth;
-// const { getInitials } = useInitials();
+const auth = usePage<{ auth: { user: App.Data.UserData } }>().props.auth.user;
+const { getInitials } = useInitials();
 
 const user = computed(() => ({
-    name: auth.user.name,
+    name: auth.email,
     avatar: {
-        text: auth.user.name,
+        text: getInitials(auth.full_name),
     },
 }));
 
@@ -101,7 +102,7 @@ function handleLogout() {
         <UButton
             v-bind="{
                 ...user,
-                label: collapsed ? undefined : auth.user.name,
+                label: collapsed ? undefined : auth.first_name,
                 trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
             }"
             color="neutral"
