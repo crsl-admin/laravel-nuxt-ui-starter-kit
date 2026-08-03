@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
-import { defineShortcuts } from '@nuxt/ui/runtime/composables/defineShortcuts.js';
 import { computed, ref } from 'vue';
+import NotificationsMenu from '@/components/sidebar/NotificationsMenu.vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';
 
@@ -120,20 +120,10 @@ const groups = computed(() => [
 
 const value = ref('');
 
-const isNotificationsSlideoverOpen = ref(false);
-
-const hasNotifications = ref(false);
-
 const toaster = {
     max: 5,
     expand: false,
 };
-
-defineShortcuts({
-    n: () => {
-        isNotificationsSlideoverOpen.value = !isNotificationsSlideoverOpen.value;
-    },
-});
 </script>
 
 <template>
@@ -179,23 +169,7 @@ defineShortcuts({
                             <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" :disabled="false" />
                         </template>
                         <template #right>
-                            <USlideover title="Notifiche" v-model:open="isNotificationsSlideoverOpen">
-                                <UTooltip text="Notifiche" :shortcuts="['N']">
-                                    <UButton
-                                        color="neutral"
-                                        variant="ghost"
-                                        square
-                                        @click="isNotificationsSlideoverOpen = true"
-                                    >
-                                        <UChip color="error" inset v-if="hasNotifications">
-                                            <UIcon name="i-lucide-bell" class="size-5 shrink-0" />
-                                        </UChip>
-                                        <UIcon v-else name="i-lucide-bell" class="size-5 shrink-0" />
-                                    </UButton>
-                                </UTooltip>
-
-                                <template #body> TODO </template>
-                            </USlideover>
+                            <NotificationsMenu />
                         </template>
                     </UDashboardNavbar>
                 </template>
