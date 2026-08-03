@@ -2,7 +2,6 @@
 import { usePage } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { computed, ref } from 'vue';
-import { route } from '@/lib/route';
 import NotificationsMenu from '@/components/sidebar/NotificationsMenu.vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';

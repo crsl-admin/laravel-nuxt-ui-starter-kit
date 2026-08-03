@@ -22,6 +22,9 @@ createInertiaApp({
 
         // Override Ziggy's global `route` in templates with the relative-by-default wrapper.
         app.config.globalProperties.route = route;
+
+        // Expose `route` globally so it can be used in any <script setup> without importing.
+        globalThis.route = route;
     },
 });
 
