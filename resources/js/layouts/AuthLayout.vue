@@ -2,6 +2,7 @@
 import { usePage } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { computed, ref } from 'vue';
+import { route } from '@/lib/route';
 import NotificationsMenu from '@/components/sidebar/NotificationsMenu.vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';
@@ -37,7 +38,7 @@ const links = [
         {
             label: 'Customers',
             icon: 'i-lucide-users',
-            to: '/customers',
+            to: route('customers'),
             onSelect: () => {
                 open.value = false;
             },
@@ -144,7 +145,15 @@ const toaster = {
                 <template #default="{ collapsed }">
                     <UDashboardSearchButton label="Cerca" :collapsed="collapsed" class="bg-transparent ring-default" />
 
-                    <UNavigationMenu :collapsed="collapsed" :items="links[0]" orientation="vertical" tooltip popover />
+                    <UNavigationMenu
+                        highlight
+                        highlight-color="secondary"
+                        :collapsed="collapsed"
+                        :items="links[0]"
+                        orientation="vertical"
+                        tooltip
+                        popover
+                    />
 
                     <UNavigationMenu
                         :collapsed="collapsed"
