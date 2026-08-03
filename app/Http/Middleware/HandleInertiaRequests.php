@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => UserData::from($request->user()),
+                'user' => $request->user() ? UserData::from($request->user()) : null,
             ],
         ];
     }
