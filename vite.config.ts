@@ -37,7 +37,7 @@ export default defineConfig({
             ui: {
                 colors: {
                     primary: 'orange',
-                    neutral: 'slate',
+                    neutral: 'zinc',
                 },
             },
         }),

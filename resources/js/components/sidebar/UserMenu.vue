@@ -18,7 +18,7 @@ const { getInitials } = useInitials();
 const user = computed(() => ({
     name: auth.email,
     avatar: {
-        text: getInitials(auth.full_name),
+        text: getInitials(auth.emul),
     },
 }));
 
