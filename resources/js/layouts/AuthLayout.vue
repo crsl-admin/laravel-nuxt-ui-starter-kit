@@ -43,37 +43,22 @@ const links = [
             },
         },
         {
-            label: 'Settings',
-            to: '/settings',
+            label: 'Impostazioni',
             icon: 'i-lucide-settings',
             defaultOpen: true,
             type: 'trigger',
             children: [
                 {
-                    label: 'Profile',
-                    to: '/settings/profile',
+                    label: 'Generale',
+                    to: route('settings.profile'),
                     exact: true,
                     onSelect: () => {
                         open.value = false;
                     },
                 },
                 {
-                    label: 'Members',
-                    to: '/settings/members',
-                    onSelect: () => {
-                        open.value = false;
-                    },
-                },
-                {
-                    label: 'Notifications',
-                    to: '/settings/notifications',
-                    onSelect: () => {
-                        open.value = false;
-                    },
-                },
-                {
-                    label: 'Security',
-                    to: '/settings/security',
+                    label: 'Sicurezza',
+                    to: route('settings.security'),
                     onSelect: () => {
                         open.value = false;
                     },
@@ -146,7 +131,6 @@ const toaster = {
 
                     <UNavigationMenu
                         highlight
-                        highlight-color="secondary"
                         :collapsed="collapsed"
                         :items="links[0]"
                         orientation="vertical"

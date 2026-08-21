@@ -12,13 +12,16 @@ defineProps<{
 }>();
 
 const colorMode = useColorMode();
-const auth = usePage<{ auth: { user: App.Data.UserData } }>().props.auth.user;
+const page = usePage<{ auth: { user: App.Data.UserData } }>();
 const { getInitials } = useInitials();
 
+const auth = computed(() => page.props.auth.user);
+
 const user = computed(() => ({
-    name: auth.email,
+    name: auth.value.email,
     avatar: {
-        text: getInitials(auth.emul),
+        src: auth.value.avatar_url ?? undefined,
+        text: getInitials(auth.value.full_name),
     },
 }));
 
@@ -34,6 +37,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
         {
             label: 'Profile',
             icon: 'i-lucide-user',
+            to: route('settings.profile'),
         },
         {
             label: 'Billing',
@@ -42,7 +46,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
         {
             label: 'Impostazioni',
             icon: 'i-lucide-settings',
-            to: '/settings/profile',
+            to: route('settings.profile'),
         },
     ],
     [
