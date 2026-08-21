@@ -11,5 +11,5 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('notify', function () {
-    Inertia::flash('toast', ['message' => 'Hello world']);
+    toast('Hello world');
 });
