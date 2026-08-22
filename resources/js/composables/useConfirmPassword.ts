@@ -30,7 +30,7 @@ export function useConfirmPassword(): UseConfirmPasswordReturn {
             return true;
         }
 
-        return (await modal.open().result) === true;
+        return (await modal.open().result);
     }
 
     return { ensurePasswordConfirmed };

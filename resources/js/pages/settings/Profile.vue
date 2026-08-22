@@ -31,6 +31,9 @@ const avatarPreview = computed(() => (avatar.value ? URL.createObjectURL(avatar.
         <Form
             v-bind="ProfileInformationController.update.form()"
             v-slot="{ errors, processing }"
+            :options="{
+                preserveState: false,
+            }"
             preserve-scroll
             class="flex w-full flex-col gap-6"
         >

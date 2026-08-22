@@ -56,7 +56,7 @@ function formatDate(value: string | null): string {
     <UPageCard
         icon="i-lucide-fingerprint"
         title="Passkey"
-        description="Accedi con Face ID, Touch ID, Windows Hello o una chiave di sicurezza, senza password."
+        description="Accedi con Face ID, Touch ID o una chiave di sicurezza, senza password."
         variant="subtle"
         :ui="{ container: 'gap-4' }"
     >
