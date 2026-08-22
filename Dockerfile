@@ -33,12 +33,20 @@ RUN install-php-extensions pdo_pgsql pdo_mysql
 USER www-data
 
 # AUTORUN: migrate --force + storage:link + config/route/view/event cache all'avvio.
-# MIGRATION_ISOLATION evita migrazioni concorrenti se scali a piu' repliche.
+# ponytail: niente AUTORUN_LARAVEL_MIGRATION_ISOLATION, con CACHE_STORE=database il
+# lock cerca la tabella cache_locks che al primo deploy non esiste ancora. Riattivalo
+# da Coolify solo se scali a piu' repliche con un cache store esterno (Redis).
 ENV AUTORUN_ENABLED=true \
-    AUTORUN_LARAVEL_MIGRATION_ISOLATION=true \
     PHP_OPCACHE_ENABLE=1 \
     SSL_MODE=off
 
 COPY --from=build --chown=www-data:www-data /app /var/www/html
+
+# Mountpoint del volume persistente per SQLite. Creato qui perche' Docker copia
+# contenuto e permessi dell'immagine nel named volume alla prima inizializzazione.
+# Il file va creato ora: l'AUTORUN di serversideup testa la connessione al DB
+# *prima* di migrare, e su SQLite un file mancante = connessione fallita = boot ko.
+RUN mkdir -p /var/www/html/storage/database \
+    && touch /var/www/html/storage/database/database.sqlite
 
 EXPOSE 8080
