@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { defineShortcuts } from '@nuxt/ui/composables/defineShortcuts';
 import { computed, ref } from 'vue';
 import NotificationsMenu from '@/components/sidebar/NotificationsMenu.vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
@@ -14,6 +15,7 @@ defineProps<{
 const { url } = usePage();
 
 const open = ref(false);
+const collapsed = ref(false);
 
 const links = [
     [
@@ -109,6 +111,12 @@ const toaster = {
     max: 5,
     expand: false,
 };
+
+defineShortcuts({
+    m: () => {
+        collapsed.value = !collapsed.value;
+    },
+});
 </script>
 
 <template>
@@ -117,6 +125,7 @@ const toaster = {
             <UDashboardSidebar
                 id="default"
                 v-model:open="open"
+                v-model:collapsed="collapsed"
                 collapsible
                 resizable
                 class="bg-elevated/25"
@@ -158,7 +167,7 @@ const toaster = {
                 <template #header>
                     <UDashboardNavbar :title>
                         <template #leading>
-                            <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" :disabled="false" />
+                            <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" />
                         </template>
                         <template #right>
                             <NotificationsMenu />
