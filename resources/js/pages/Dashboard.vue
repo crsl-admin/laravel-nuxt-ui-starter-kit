@@ -12,5 +12,5 @@ const sendNotification = () => {
 
 <template>
     <Head title="Dashboard" />
-    <UButton label="Click me" class="m-2" @click="sendNotification" />
+<!--    <UButton label="Click me" class="m-2" @click="sendNotification" />-->
 </template>
