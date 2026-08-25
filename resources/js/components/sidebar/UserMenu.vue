@@ -30,7 +30,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
         {
             type: 'label',
             label: user.value.name,
-            avatar: user.value.avatar,
+            avatar: user.value?.avatar,
         },
     ],
     [
