@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { defineShortcuts } from '@nuxt/ui/composables/defineShortcuts';
 import { computed, ref } from 'vue';
 import NotificationsMenu from '@/components/sidebar/NotificationsMenu.vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
@@ -14,6 +15,7 @@ defineProps<{
 const { url } = usePage();
 
 const open = ref(false);
+const collapsed = ref(false);
 
 const links = [
     [
@@ -37,43 +39,28 @@ const links = [
         {
             label: 'Customers',
             icon: 'i-lucide-users',
-            to: '/customers',
+            to: route('customers'),
             onSelect: () => {
                 open.value = false;
             },
         },
         {
-            label: 'Settings',
-            to: '/settings',
+            label: 'Impostazioni',
             icon: 'i-lucide-settings',
             defaultOpen: true,
             type: 'trigger',
             children: [
                 {
-                    label: 'Profile',
-                    to: '/settings/profile',
+                    label: 'Generale',
+                    to: route('settings.profile'),
                     exact: true,
                     onSelect: () => {
                         open.value = false;
                     },
                 },
                 {
-                    label: 'Members',
-                    to: '/settings/members',
-                    onSelect: () => {
-                        open.value = false;
-                    },
-                },
-                {
-                    label: 'Notifications',
-                    to: '/settings/notifications',
-                    onSelect: () => {
-                        open.value = false;
-                    },
-                },
-                {
-                    label: 'Security',
-                    to: '/settings/security',
+                    label: 'Sicurezza',
+                    to: route('settings.security'),
                     onSelect: () => {
                         open.value = false;
                     },
@@ -124,6 +111,12 @@ const toaster = {
     max: 5,
     expand: false,
 };
+
+defineShortcuts({
+    m: () => {
+        collapsed.value = !collapsed.value;
+    },
+});
 </script>
 
 <template>
@@ -132,6 +125,7 @@ const toaster = {
             <UDashboardSidebar
                 id="default"
                 v-model:open="open"
+                v-model:collapsed="collapsed"
                 collapsible
                 resizable
                 class="bg-elevated/25"
@@ -144,7 +138,14 @@ const toaster = {
                 <template #default="{ collapsed }">
                     <UDashboardSearchButton label="Cerca" :collapsed="collapsed" class="bg-transparent ring-default" />
 
-                    <UNavigationMenu :collapsed="collapsed" :items="links[0]" orientation="vertical" tooltip popover />
+                    <UNavigationMenu
+                        highlight
+                        :collapsed="collapsed"
+                        :items="links[0]"
+                        orientation="vertical"
+                        tooltip
+                        popover
+                    />
 
                     <UNavigationMenu
                         :collapsed="collapsed"
@@ -166,7 +167,7 @@ const toaster = {
                 <template #header>
                     <UDashboardNavbar :title>
                         <template #leading>
-                            <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" :disabled="false" />
+                            <UDashboardSidebarCollapse icon="i-lucide-panel-left" as="button" />
                         </template>
                         <template #right>
                             <NotificationsMenu />

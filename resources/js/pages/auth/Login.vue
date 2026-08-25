@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { usePasskeyVerify } from '@laravel/passkeys/vue';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
 import { useToast } from '@nuxt/ui/runtime/composables/useToast.js';
+import { computed } from 'vue';
 import { store } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
 import passwordResetLinkController from '@/actions/Laravel/Fortify/Http/Controllers/PasswordResetLinkController';
 import RegisteredUserController from '@/actions/Laravel/Fortify/Http/Controllers/RegisteredUserController';
@@ -9,9 +11,10 @@ import GuestLayout from '@/layouts/GuestLayout.vue';
 
 defineOptions({ layout: GuestLayout });
 
-defineProps<{
+const props = defineProps<{
     canResetPassword: boolean;
     canRegister: boolean;
+    canUsePasskeys: boolean;
 }>();
 
 const toast = useToast();
@@ -38,7 +41,20 @@ const fields: AuthFormField[] = [
     },
 ];
 
-const providers = [
+const {
+    verify,
+    isLoading: passkeyLoading,
+    isSupported: passkeySupported,
+} = usePasskeyVerify({
+    onSuccess: (response) => {
+        window.location.href = response.redirect ?? '/';
+    },
+    onError: (error) => {
+        toast.add({ title: 'Accesso con passkey non riuscito', description: error.message, color: 'error' });
+    },
+});
+
+const oauthProviders = [
     {
         label: 'Google',
         icon: 'material-icon-theme:google',
@@ -54,6 +70,21 @@ const providers = [
         },
     },
 ];
+
+// Add passkey button if passkeys are enabled in Fortify
+const providers = computed(() => [
+    ...(props.canUsePasskeys && passkeySupported.value
+        ? [
+              {
+                  label: 'Accedi con una passkey',
+                  icon: 'i-lucide-fingerprint',
+                  loading: passkeyLoading.value,
+                  onClick: () => verify(),
+              },
+          ]
+        : []),
+    ...oauthProviders,
+]);
 
 const form = useForm({
     email: '',

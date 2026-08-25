@@ -1,0 +1,197 @@
+<script setup lang="ts">
+import { router, useForm } from '@inertiajs/vue3';
+import { useToast } from '@nuxt/ui/runtime/composables/useToast.js';
+import { ref } from 'vue';
+import { store as confirmTwoFactor } from '@/actions/Laravel/Fortify/Http/Controllers/ConfirmedTwoFactorAuthenticationController';
+import { store as regenerateRecoveryCodes } from '@/actions/Laravel/Fortify/Http/Controllers/RecoveryCodeController';
+import TwoFactorAuthenticationController from '@/actions/Laravel/Fortify/Http/Controllers/TwoFactorAuthenticationController';
+import { useConfirmPassword } from '@/composables/useConfirmPassword';
+
+const props = defineProps<{
+    enabled: boolean;
+    confirmed: boolean;
+    qrCodeSvg: string | null;
+    setupKey: string | null;
+    recoveryCodes?: string[];
+}>();
+
+const toast = useToast();
+const { ensurePasswordConfirmed } = useConfirmPassword();
+
+const processing = ref(false);
+const confirmationForm = useForm({ code: [] as number[] });
+
+async function enable(): Promise<void> {
+    if (!(await ensurePasswordConfirmed())) {
+        return;
+    }
+
+    router.post(
+        TwoFactorAuthenticationController.store.url(),
+        {},
+        {
+            preserveScroll: true,
+            onStart: () => (processing.value = true),
+            onFinish: () => (processing.value = false),
+        },
+    );
+}
+
+function confirm(): void {
+    confirmationForm
+        .transform((data) => ({ code: data.code.join('') }))
+        .post(confirmTwoFactor.url(), {
+            preserveScroll: true,
+            onSuccess: () => {
+                confirmationForm.reset();
+                loadRecoveryCodes();
+                toast.add({
+                    title: 'Autenticazione a due fattori attiva',
+                    description: 'Conserva i codici di recupero in un posto sicuro.',
+                    icon: 'i-lucide-shield-check',
+                    color: 'success',
+                });
+            },
+        });
+}
+
+async function disable(): Promise<void> {
+    if (!(await ensurePasswordConfirmed())) {
+        return;
+    }
+
+    router.delete(TwoFactorAuthenticationController.destroy.url(), {
+        preserveScroll: true,
+        onStart: () => (processing.value = true),
+        onFinish: () => (processing.value = false),
+        onSuccess: () =>
+            toast.add({
+                title: 'Autenticazione a due fattori disattivata',
+                icon: 'i-lucide-shield-off',
+                color: 'warning',
+            }),
+    });
+}
+
+function loadRecoveryCodes(): void {
+    router.reload({ only: ['recoveryCodes'] });
+}
+
+async function regenerate(): Promise<void> {
+    if (!(await ensurePasswordConfirmed())) {
+        return;
+    }
+
+    router.post(
+        regenerateRecoveryCodes.url(),
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                loadRecoveryCodes();
+                toast.add({
+                    title: 'Codici di recupero rigenerati',
+                    icon: 'i-lucide-refresh-cw',
+                    color: 'success',
+                });
+            },
+        },
+    );
+}
+
+function copySetupKey(): void {
+    if (!props.setupKey) {
+        return;
+    }
+
+    navigator.clipboard.writeText(props.setupKey);
+    toast.add({ title: 'Chiave copiata', icon: 'i-lucide-copy', color: 'success' });
+}
+</script>
+
+<template>
+    <UPageCard
+        icon="i-lucide-smartphone"
+        title="Autenticazione a due fattori"
+        description="Aggiungi un secondo passaggio al login usando un'app di autenticazione."
+        variant="subtle"
+        :ui="{ container: 'gap-4' }"
+    >
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <UBadge
+                :color="confirmed ? 'success' : enabled ? 'warning' : 'neutral'"
+                :label="confirmed ? 'Attiva' : enabled ? 'In attesa di conferma' : 'Non attiva'"
+                variant="subtle"
+            />
+
+            <div class="flex gap-2">
+                <UButton
+                    v-if="confirmed"
+                    label="Codici di recupero"
+                    color="neutral"
+                    variant="outline"
+                    icon="i-lucide-key-round"
+                    @click="loadRecoveryCodes"
+                />
+
+                <UButton
+                    v-if="enabled"
+                    label="Disattiva"
+                    color="error"
+                    variant="subtle"
+                    icon="i-lucide-shield-off"
+                    :loading="processing"
+                    @click="disable"
+                />
+
+                <UButton v-else label="Attiva" icon="i-lucide-shield-check" :loading="processing" @click="enable" />
+            </div>
+        </div>
+
+        <div v-if="enabled && !confirmed" class="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <!-- eslint-disable-next-line vue/no-v-html -- The QR code SVG is generated by Fortify. -->
+            <div class="rounded-lg bg-white p-2 [&>svg]:size-40" v-html="qrCodeSvg" />
+
+            <div class="flex flex-1 flex-col gap-3">
+                <p class="text-sm text-muted">
+                    Scansiona il QR code con la tua app di autenticazione, poi inserisci il codice a 6 cifre per
+                    completare l'attivazione.
+                </p>
+
+                <UFieldGroup v-if="setupKey" class="w-full">
+                    <UInput :model-value="setupKey" readonly class="w-full font-mono" />
+                    <UButton icon="i-lucide-copy" color="neutral" variant="subtle" @click="copySetupKey" />
+                </UFieldGroup>
+
+                <form class="flex items-start gap-2" @submit.prevent="confirm">
+                    <UFormField :error="confirmationForm.errors.code">
+                        <UPinInput v-model="confirmationForm.code" :length="6" otp type="number" @complete="confirm" />
+                    </UFormField>
+
+                    <UButton type="submit" label="Conferma" :loading="confirmationForm.processing" />
+                </form>
+            </div>
+        </div>
+
+        <div v-else-if="recoveryCodes?.length" class="flex flex-col gap-3">
+            <p class="text-sm text-muted">
+                Ogni codice di recupero può essere usato una sola volta per accedere se perdi il tuo dispositivo.
+            </p>
+
+            <ul class="grid grid-cols-2 gap-2 rounded-lg bg-elevated/50 p-3 font-mono text-sm">
+                <li v-for="code in recoveryCodes" :key="code">{{ code }}</li>
+            </ul>
+
+            <div>
+                <UButton
+                    label="Rigenera codici"
+                    color="neutral"
+                    variant="outline"
+                    icon="i-lucide-refresh-cw"
+                    size="sm"
+                    @click="regenerate"
+                />
+            </div>
+        </div>
+    </UPageCard>
+</template>

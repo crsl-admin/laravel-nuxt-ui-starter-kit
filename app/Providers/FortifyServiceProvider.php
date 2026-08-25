@@ -58,6 +58,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(fn () => Inertia::render('auth/Login', [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'canRegister' => Features::enabled(Features::registration()),
+            'canUsePasskeys' => Features::enabled(Features::passkeys()),
         ]));
         Fortify::requestPasswordResetLinkView(fn (Request $request) => Inertia::render('auth/ForgotPassword'));
         Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/ResetPassword', [
@@ -65,5 +66,14 @@ class FortifyServiceProvider extends ServiceProvider
             'email' => $request->query('email'),
         ]));
         Fortify::registerView(fn () => Inertia::render('auth/Register'));
+        Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/TwoFactorChallenge'));
+
+        // Password confirmation happens in a modal, so a full page visit only occurs when
+        // the confirmation expired mid-action: send the user back to try again.
+        Fortify::confirmPasswordView(function () {
+            toast('Conferma la password per continuare.', 'warning');
+
+            return redirect()->route('settings.security');
+        });
     }
 }

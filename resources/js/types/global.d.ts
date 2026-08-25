@@ -1,3 +1,4 @@
+import type { route as routeFn } from '@/lib/route';
 import type { Auth } from '@/types/auth';
 
 // Extend ImportMeta interface for Vite...
@@ -30,4 +31,11 @@ declare module 'vue' {
         $page: Page;
         $headManager: ReturnType<typeof createHeadManager>;
     }
+}
+
+// `route` is registered on globalThis in app.ts, so it can be used without importing.
+// `var` (not const/let) is required here: only var/function declarations become properties
+// of `globalThis`, which is what makes the assignment in app.ts type-check.
+declare global {
+    var route: typeof routeFn;
 }

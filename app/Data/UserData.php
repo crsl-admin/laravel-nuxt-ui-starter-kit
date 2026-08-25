@@ -16,6 +16,7 @@ class UserData extends Data
         public string $first_name,
         public string $last_name,
         public string $email,
+        public ?string $avatar_url = null,
     ) {
         $this->full_name = $this->first_name.' '.$this->last_name;
     }
