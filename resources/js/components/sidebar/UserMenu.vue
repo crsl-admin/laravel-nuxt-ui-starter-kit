@@ -35,17 +35,8 @@ const items = computed<DropdownMenuItem[][]>(() => [
     ],
     [
         {
-            label: 'Profile',
+            label: 'Profilo',
             icon: 'i-lucide-user',
-            to: route('settings.profile'),
-        },
-        {
-            label: 'Billing',
-            icon: 'i-lucide-credit-card',
-        },
-        {
-            label: 'Impostazioni',
-            icon: 'i-lucide-settings',
             to: route('settings.profile'),
         },
     ],
