@@ -30,22 +30,13 @@ const items = computed<DropdownMenuItem[][]>(() => [
         {
             type: 'label',
             label: user.value.name,
-            avatar: user.value.avatar,
+            avatar: user.value?.avatar,
         },
     ],
     [
         {
-            label: 'Profile',
+            label: 'Profilo',
             icon: 'i-lucide-user',
-            to: route('settings.profile'),
-        },
-        {
-            label: 'Billing',
-            icon: 'i-lucide-credit-card',
-        },
-        {
-            label: 'Impostazioni',
-            icon: 'i-lucide-settings',
             to: route('settings.profile'),
         },
     ],
