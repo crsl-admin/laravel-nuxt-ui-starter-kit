@@ -11,7 +11,7 @@ if (! function_exists('toast')) {
      * @param string|null $icon
      * @return void
      */
-    function toast($message, string $type = 'success', ?string $color = null, ?string $body = null, ?string $icon = null): void
+    function toast(string $message, string $type = 'success', ?string $color = null, ?string $body = null, ?string $icon = null): void
     {
         Inertia::flash('toast', [
             'message' => $message,

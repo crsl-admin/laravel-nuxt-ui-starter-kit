@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 
 defineOptions({
     layout: () => ({ title: 'Dashboard' }),
 });
 
-const sendNotification = () => {
+/*const sendNotification = () => {
     router.get('/notify');
-};
+};*/
 </script>
 
 <template>
