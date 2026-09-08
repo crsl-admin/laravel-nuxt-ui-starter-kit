@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Data\UserData;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,6 +42,9 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user() ? UserData::from($request->user()) : null,
+                'can' => [
+                    'viewCustomers' => $request->user()?->can('viewAny', Customer::class) ?? false,
+                ],
             ],
         ];
     }
