@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Data\UserData;
-use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,15 +36,16 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user() ? UserData::from($request->user()) : null,
-                'can' => [
-                    'viewCustomers' => $request->user()?->can('viewAny', Customer::class) ?? false,
-                ],
+                'user' => $user ? UserData::from($user) : null,
             ],
+            'is_super_admin' => $user?->isSuperAdmin() ?? false,
+            'permissions' => $user?->getAllPermissions()->pluck('name')->sort()->values()->all() ?? [],
         ];
     }
 }

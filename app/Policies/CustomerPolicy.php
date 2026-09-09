@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enum\Permissions;
 use App\Models\Customer;
 use App\Models\User;
 
@@ -12,7 +13,7 @@ class CustomerPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('customers.view');
+        return $user->can(Permissions::VIEW_ALL_CUSTOMER->value);
     }
 
     /**
@@ -20,7 +21,7 @@ class CustomerPolicy
      */
     public function view(User $user, Customer $customer): bool
     {
-        return $user->can('customers.view');
+        return $user->can(Permissions::VIEW_CUSTOMER->value);
     }
 
     /**
@@ -28,7 +29,7 @@ class CustomerPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('customers.create');
+        return $user->can(Permissions::CREATE_CUSTOMER->value);
     }
 
     /**
@@ -36,7 +37,7 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer): bool
     {
-        return $user->can('customers.update');
+        return $user->can(Permissions::UPDATE_CUSTOMER->value);
     }
 
     /**
@@ -44,7 +45,7 @@ class CustomerPolicy
      */
     public function delete(User $user, Customer $customer): bool
     {
-        return $user->can('customers.delete');
+        return $user->can(Permissions::DELETE_CUSTOMER->value);
     }
 
     /**

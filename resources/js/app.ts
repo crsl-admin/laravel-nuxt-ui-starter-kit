@@ -6,6 +6,7 @@ import { ZiggyVue } from 'ziggy-js';
 import Layout from '@/layouts/AuthLayout.vue';
 import { initializeFlashToast } from '@/lib/flashToast';
 import { route } from '@/lib/route';
+import canPlugin from '@/plugins/can';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,6 +20,7 @@ createInertiaApp({
         app
             .use(ui)
             .use(ZiggyVue)
+            .use(canPlugin);
 
         // Override Ziggy's global `route` in templates with the relative-by-default wrapper.
         app.config.globalProperties.route = route;
