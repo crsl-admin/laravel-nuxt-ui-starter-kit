@@ -19,6 +19,8 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             name: string;
             auth: Auth;
+            is_super_admin: boolean;
+            permissions: string[];
             sidebarOpen: boolean;
             [key: string]: unknown;
         };
@@ -30,6 +32,7 @@ declare module 'vue' {
         $inertia: typeof Router;
         $page: Page;
         $headManager: ReturnType<typeof createHeadManager>;
+        can: (permissions: string | string[]) => boolean;
     }
 }
 

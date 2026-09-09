@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 import NotificationsMenu from '@/components/sidebar/NotificationsMenu.vue';
 import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';
+import { useAuthorization } from '@/composables/useAuthorization';
 
 defineProps<{
     breadcrumbItems?: NavigationMenuItem[];
@@ -13,82 +14,98 @@ defineProps<{
 }>();
 
 const { url } = usePage();
+const { can } = useAuthorization();
 
 const open = ref(false);
 const collapsed = ref(false);
 
-const links = [
-    [
-        {
-            label: 'Home',
-            icon: 'i-lucide-house',
-            to: '/dashboard',
-            onSelect: () => {
-                open.value = false;
-            },
-        },
-        {
-            label: 'Inbox',
-            icon: 'i-lucide-inbox',
-            to: '/inbox',
-            badge: '4',
-            onSelect: () => {
-                open.value = false;
-            },
-        },
-        {
-            label: 'Customers',
-            icon: 'i-lucide-users',
-            to: route('customers'),
-            onSelect: () => {
-                open.value = false;
-            },
-        },
-        {
-            label: 'Impostazioni',
-            icon: 'i-lucide-settings',
-            defaultOpen: true,
-            type: 'trigger',
-            children: [
+const links = computed(
+    () =>
+        [
+            [
                 {
-                    label: 'Generale',
-                    to: route('settings.profile'),
-                    exact: true,
+                    label: 'Home',
+                    icon: 'i-lucide-house',
+                    to: '/dashboard',
                     onSelect: () => {
                         open.value = false;
                     },
                 },
                 {
-                    label: 'Sicurezza',
-                    to: route('settings.security'),
+                    label: 'Inbox',
+                    icon: 'i-lucide-inbox',
+                    to: '/inbox',
+                    badge: '4',
                     onSelect: () => {
                         open.value = false;
                     },
+                },
+                {
+                    label: 'Customers',
+                    icon: 'i-lucide-users',
+                    to: route('customers'),
+                    class: can('view_all_customer') ? undefined : 'hidden',
+                    onSelect: () => {
+                        open.value = false;
+                    },
+                },
+                {
+                    label: 'Impostazioni',
+                    icon: 'i-lucide-settings',
+                    defaultOpen: true,
+                    type: 'trigger',
+                    children: [
+                        {
+                            label: 'Generale',
+                            to: route('settings.profile'),
+                            exact: true,
+                            onSelect: () => {
+                                open.value = false;
+                            },
+                        },
+                        {
+                            label: 'Sicurezza',
+                            to: route('settings.security'),
+                            onSelect: () => {
+                                open.value = false;
+                            },
+                        },
+                        ...(can('manage_role')
+                            ? [
+                                  {
+                                      label: 'Ruoli',
+                                      to: route('settings.roles.index'),
+                                      onSelect: () => {
+                                          open.value = false;
+                                      },
+                                  },
+                              ]
+                            : []),
+                    ],
                 },
             ],
-        },
-    ],
-    [
-        {
-            label: 'Feedback',
-            icon: 'i-lucide-message-circle',
-            to: 'https://github.com/nuxt-ui-pro/dashboard-vue',
-            target: '_blank',
-        },
-        {
-            label: 'Help & Support',
-            icon: 'i-lucide-info',
-            to: 'https://github.com/nuxt/ui-pro',
-            target: '_blank',
-        },
-    ],
-] satisfies NavigationMenuItem[][];
+            [
+                {
+                    label: 'Feedback',
+                    icon: 'i-lucide-message-circle',
+                    to: 'https://github.com/nuxt-ui-pro/dashboard-vue',
+                    target: '_blank',
+                },
+                {
+                    label: 'Help & Support',
+                    icon: 'i-lucide-info',
+                    to: 'https://github.com/nuxt/ui-pro',
+                    target: '_blank',
+                },
+            ],
+        ] satisfies NavigationMenuItem[][],
+);
 
 const groups = computed(() => [
     {
         id: 'links',
         label: 'Vai a',
-        items: links.flat(),
+        items: links.value.flat(),
     },
     {
         id: 'code',
