@@ -9,6 +9,7 @@ enum Permissions: string
     case CREATE_CUSTOMER = 'create_customer';
     case UPDATE_CUSTOMER = 'update_customer';
     case DELETE_CUSTOMER = 'delete_customer';
+    case MANAGE_ROLE = 'manage_role';
 
     public function label(): string
     {
@@ -18,6 +19,7 @@ enum Permissions: string
             self::CREATE_CUSTOMER => 'Crea cliente',
             self::UPDATE_CUSTOMER => 'Modifica cliente',
             self::DELETE_CUSTOMER => 'Elimina cliente',
+            self::MANAGE_ROLE => 'Gestisci ruoli',
         };
     }
 }

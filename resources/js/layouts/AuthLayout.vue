@@ -70,6 +70,17 @@ const links = computed(
                                 open.value = false;
                             },
                         },
+                        ...(can('manage_role')
+                            ? [
+                                  {
+                                      label: 'Ruoli',
+                                      to: route('settings.roles.index'),
+                                      onSelect: () => {
+                                          open.value = false;
+                                      },
+                                  },
+                              ]
+                            : []),
                     ],
                 },
             ],

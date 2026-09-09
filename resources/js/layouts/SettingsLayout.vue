@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { computed } from 'vue';
+import { useAuthorization } from '@/composables/useAuthorization';
+
+const { can } = useAuthorization();
 
 const tabs = computed<NavigationMenuItem[]>(() => [
     {
@@ -13,6 +16,15 @@ const tabs = computed<NavigationMenuItem[]>(() => [
         icon: 'i-lucide-shield-check',
         to: route('settings.security'),
     },
+    ...(can('manage_role')
+        ? [
+              {
+                  label: 'Ruoli',
+                  icon: 'i-lucide-shield-user',
+                  to: route('settings.roles.index'),
+              },
+          ]
+        : []),
 ]);
 </script>
 
