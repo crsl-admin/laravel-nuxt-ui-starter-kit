@@ -28,3 +28,5 @@ yarn-error.log
 /.zed
 auto-imports.d.ts
 components.d.ts
+.DS_Store
+.ai/mcp/mcp.json
