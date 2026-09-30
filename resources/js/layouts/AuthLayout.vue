@@ -45,6 +45,14 @@ const links = [
             },
         },
         {
+            label: 'Demo table',
+            icon: 'i-lucide-table',
+            to: route('demotable'),
+            onSelect: () => {
+                open.value = false;
+            },
+        },
+        {
             label: 'Impostazioni',
             icon: 'i-lucide-settings',
             defaultOpen: true,
