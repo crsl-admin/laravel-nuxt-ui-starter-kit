@@ -7,7 +7,7 @@ use Inertia\Inertia;
 Route::redirect('/', '/login');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', fn () => Inertia::render('Dashboard'));
+    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/customers', fn () => Inertia::render('Customers'))->name('customers');
     Route::get('/settings/profile', fn () => Inertia::render('settings/Profile'))->name('settings.profile');
     Route::get('/settings/security', SecurityController::class)->name('settings.security');

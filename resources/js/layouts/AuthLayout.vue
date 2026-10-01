@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { usePage } from '@inertiajs/vue3';
+import { usePage, Link } from '@inertiajs/vue3';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { defineShortcuts } from '@nuxt/ui/composables/defineShortcuts';
 import { computed, ref } from 'vue';
+import AppLogo from '@/components/AppLogo.vue';
 import NotificationsMenu from '@/components/sidebar/NotificationsMenu.vue';
-import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
+// import TeamsMenu from '@/components/sidebar/TeamsMenu.vue';
 import UserMenu from '@/components/sidebar/UserMenu.vue';
 
 defineProps<{
@@ -28,44 +29,12 @@ const links = [
             },
         },
         {
-            label: 'Inbox',
-            icon: 'i-lucide-inbox',
-            to: '/inbox',
-            badge: '4',
-            onSelect: () => {
-                open.value = false;
-            },
-        },
-        {
             label: 'Customers',
             icon: 'i-lucide-users',
             to: route('customers'),
             onSelect: () => {
                 open.value = false;
             },
-        },
-        {
-            label: 'Impostazioni',
-            icon: 'i-lucide-settings',
-            defaultOpen: true,
-            type: 'trigger',
-            children: [
-                {
-                    label: 'Generale',
-                    to: route('settings.profile'),
-                    exact: true,
-                    onSelect: () => {
-                        open.value = false;
-                    },
-                },
-                {
-                    label: 'Sicurezza',
-                    to: route('settings.security'),
-                    onSelect: () => {
-                        open.value = false;
-                    },
-                },
-            ],
         },
     ],
     [
@@ -83,6 +52,18 @@ const links = [
         },
     ],
 ] satisfies NavigationMenuItem[][];
+
+const settings = [
+    {
+        label: 'Impostazioni',
+        icon: 'i-lucide-settings',
+        type: 'trigger',
+        children: [
+            { label: 'Generale', to: route('settings.profile'), exact: true, onSelect: close },
+            { label: 'Sicurezza', to: route('settings.security'), onSelect: close },
+        ],
+    },
+] satisfies NavigationMenuItem[];
 
 const groups = computed(() => [
     {
@@ -132,7 +113,13 @@ defineShortcuts({
                 :ui="{ footer: 'lg:border-t lg:border-default' }"
             >
                 <template #header="{ collapsed }">
-                    <TeamsMenu :collapsed="collapsed" />
+<!--                    <TeamsMenu :collapsed="collapsed" />-->
+                    <Link href="/dashboard" class="flex w-full items-center" :class="collapsed && 'justify-center'">
+                        <AppLogo
+                            :variant="collapsed ? 'monogramma' : 'orizzontale'"
+                            :class="collapsed ? 'h-6 w-8 object-contain' : 'h-12 w-auto'"
+                        />
+                    </Link>
                 </template>
 
                 <template #default="{ collapsed }">
@@ -149,9 +136,10 @@ defineShortcuts({
 
                     <UNavigationMenu
                         :collapsed="collapsed"
-                        :items="links[1]"
+                        :items="settings"
                         orientation="vertical"
                         tooltip
+                        popover
                         class="mt-auto"
                     />
                 </template>
